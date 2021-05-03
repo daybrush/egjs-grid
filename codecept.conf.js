@@ -31,11 +31,11 @@ exports.config = {
     }
   },
   async bootstrap() {
-    execSh(`npm run e2e:storybook`, {
-      cwd: __dirname,
-    }).catch(() => {
-      process.exit();
-    });
+    // execSh(`npm run e2e:storybook`, {
+    //   cwd: __dirname,
+    // }).catch(() => {
+    //   process.exit();
+    // });
     return new Promise(resolve => {
       setTimeout(() => {
         resolve();
@@ -43,7 +43,7 @@ exports.config = {
     });
   },
   async teardown() {
-    process.exit(0);
+    // process.exit(0);
   },
   mocha: {},
   name: 'egjs-flicking',

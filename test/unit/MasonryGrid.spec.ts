@@ -834,5 +834,219 @@ describe("test MasonryGrid", () => {
     expect(grid.getItems()[3].cssRect.top).to.be.deep.equals(150);
     expect(grid.getOutlines().end).to.be.deep.equals([300, 300]);
   });
+  it(`should check if scale is based on the top of the outline at the bottom if stretchAlign = 'scale-down'`, async () => {
+    // Given
+    container!.style.cssText = "width: 600px; height: 600px;";
+    grid = new MasonryGrid(container!, {
+      stretchOutline: "scale-down",
+      gap: 0,
+    });
+
+    // 0, 1
+    // 3, 2
+    grid.setItems([
+      new GridItem(false, {
+        rect: { width: 300, height: 100, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 50, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 200, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 400, top: 0, left: 0 },
+      }),
+    ]);
+    // end [500, 250]
+    // => [250, 250]
+
+    // When
+    grid.renderItems();
+
+    await waitEvent(grid, "renderComplete");
+
+
+    // Then
+    // 1/2배 스케일링하여  사이즈 조절
+    expect(grid.getItems()[0].computedContentSize).to.be.deep.equals(50);
+    expect(grid.getItems()[3].computedContentSize).to.be.deep.equals(200);
+    expect(grid.getOutlines().end).to.be.deep.equals([250, 250]);
+  });
+  it(`should check if scale is based on the top of the outline at the bottom if stretchAlign = 'scale-up'`, async () => {
+    // Given
+    container!.style.cssText = "width: 600px; height: 600px;";
+    grid = new MasonryGrid(container!, {
+      stretchOutline: "scale-up",
+      gap: 0,
+    });
+
+    // 0, 1
+    // 3, 2
+    grid.setItems([
+      new GridItem(false, {
+        rect: { width: 300, height: 100, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 50, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 200, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 400, top: 0, left: 0 },
+      }),
+    ]);
+    // end [500, 250]
+    // => [500, 500]
+
+    // When
+    grid.renderItems();
+
+    await waitEvent(grid, "renderComplete");
+
+
+    // Then
+    // 2배 스케일링하여  사이즈 조절
+    expect(grid.getItems()[0].computedContentSize).to.be.deep.equals(100);
+    expect(grid.getItems()[3].computedContentSize).to.be.deep.equals(400);
+    expect(grid.getOutlines().end).to.be.deep.equals([500, 500]);
+  });
+  it(`should check if scale is based on the top of the outline at the bottom if stretchAlign = 'scale-center'`, async () => {
+    // Given
+    container!.style.cssText = "width: 600px; height: 600px;";
+    grid = new MasonryGrid(container!, {
+      stretchOutline: "scale-center",
+      gap: 0,
+    });
+
+    // 0, 1
+    // 3, 2
+    grid.setItems([
+      new GridItem(false, {
+        rect: { width: 300, height: 100, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 50, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 200, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 400, top: 0, left: 0 },
+      }),
+    ]);
+    // end [500, 250]
+    // => [375, 375]
+
+    // When
+    grid.renderItems();
+
+    await waitEvent(grid, "renderComplete");
+
+
+    // Then
+    // 2배 스케일링하여  사이즈 조절
+    expect(grid.getItems()[0].computedContentSize).to.be.deep.equals(75);
+    expect(grid.getItems()[3].computedContentSize).to.be.deep.equals(300);
+
+
+    expect(grid.getItems()[1].computedContentSize).to.be.deep.equals(75);
+    expect(grid.getItems()[2].computedContentSize).to.be.deep.equals(300);
+
+    expect(grid.getOutlines().end).to.be.deep.equals([375, 375]);
+  });
+
+  it(`should check if scale is based on the top of the outline at the bottom and containerStretchSize with stretchAlign`, async () => {
+    // Given
+    container!.style.cssText = "width: 600px; height: 600px;";
+    grid = new MasonryGrid(container!, {
+      stretchOutline: "scale-down",
+      gap: 0,
+      stretchContainerSize: [0, 200],
+    });
+
+    // 0, 1
+    // 3, 2
+    grid.setItems([
+      new GridItem(false, {
+        rect: { width: 300, height: 100, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 50, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 200, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 400, top: 0, left: 0 },
+      }),
+    ]);
+    // end [500, 250]
+    // => [200, 200]
+
+    // When
+    grid.renderItems();
+
+    await waitEvent(grid, "renderComplete");
+
+
+    // Then
+    // 200px로 강제로 스케일링하여  사이즈 조절
+    expect(grid.getItems()[0].computedContentSize).to.be.deep.equals(40);
+    expect(grid.getItems()[3].computedContentSize).to.be.deep.equals(160);
+
+    expect(grid.getItems()[1].computedContentSize).to.be.deep.equals(40);
+    expect(grid.getItems()[2].computedContentSize).to.be.deep.equals(160);
+
+
+    expect(grid.getOutlines().end).to.be.deep.equals([200, 200]);
+  });
+  it(`should check if scale is based on the top of the outline at the bottom and containerStretchSize, stretchItemSize with stretchAlign`, async () => {
+    // Given
+    container!.style.cssText = "width: 600px; height: 600px;";
+    grid = new MasonryGrid(container!, {
+      stretchOutline: "scale-down",
+      gap: 0,
+      stretchContainerSize: [0, 200],
+      stretchItemSize: [0, "3:1"],
+    });
+
+    // 0, 1
+    // 3, 2
+    grid.setItems([
+      new GridItem(false, {
+        rect: { width: 300, height: 100, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 100, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 200, top: 0, left: 0 },
+      }),
+      new GridItem(false, {
+        rect: { width: 300, height: 400, top: 0, left: 0 },
+      }),
+    ]);
+    // end [500, 250]
+    // itemSize 조절 [300, 250]
+    // => [200, 200]
+
+    // When
+    grid.renderItems();
+
+    await waitEvent(grid, "renderComplete");
+
+
+    // Then
+    // 200px로 강제로 스케일링하여  사이즈 조절
+    expect(grid.getItems()[0].computedContentSize).to.be.deep.equals(100);
+    expect(grid.getItems()[3].computedContentSize).to.be.deep.equals(100);
+
+    // expect(grid.getItems()[1].computedContentSize).to.be.deep.equals(40);
+    // expect(grid.getItems()[2].computedContentSize).to.be.deep.equals(160);
+
+    expect(grid.getOutlines().end).to.be.deep.equals([200, 200]);
+  });
 });
 

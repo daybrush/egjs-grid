@@ -97,6 +97,8 @@ document.querySelector(".container").innerHTML = html;
 const grid = new Grid.MasonryGrid(".container", {
   column: 2,
   stretchOutline: "scale-down",
+  stretchContainerSize: [0, 1000 - 112],
+  stretchItemSize: ["16:9", "3:3"],
   align: "stretch",
   columnSizeRatio: true,
   isConstantSize: true,
